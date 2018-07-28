@@ -26,7 +26,7 @@ def my_range(page_objects):
     start_index = index - 5 if index >= 5 else 0
     end_index = index + 5 if index <= max_index - 5 else max_index
     # My new page range
-    page_range = page_objects.paginator.page_range[start_index:end_index]
+    page_range = list(page_objects.paginator.page_range)[start_index:end_index]
 
     return page_range
 
