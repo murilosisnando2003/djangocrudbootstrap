@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <h1>Bacias Hidrográficas</h1>
+            <hr>
+
+            {% include 'partials/add_button.html' with link='basins:add' %}
+
+
+            {% if page_objects %}
+
+                <!-- search form -->
+                <form class="navbar-form navbar-right" action="." method="get">
+
+                    <input id="search_box" name="search_box" type="text" placeholder="Pesquisar pelo nome"
+                           class="form-control">
+
+                    <button type="submit" class="btn btn-primary form-control">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+
+                    {% if result %}
+                        <a class="btn btn-primary btn-success" href="{% url 'basins:list' %}" role="button">
+                            <span class="glyphicon glyphicon-refresh" aria-hidden="true" title="Resetar"></span>
+                        </a>
+                    {% endif %}
+
+                </form>
+
+                {% if result %}
+                    <h3 class="text-success">Resultado da busca: {{ result }} registro(s) com o nome
+                        <strong>{{ selection }}</strong></h3>
+                {% endif %}
+
+                </div><!-- col-md-12 -->
+
+                <div class="col-md-12 TbMargin">
+
+                {% bootstrap_messages %}
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome da Bacia</th>
+                        <th>Área (km<sup>2</sup>)</th>
+                        <th>Perímetro (km)</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for basin in page_objects %}
+
+                        <tr>
+                            <th>{{ basin.pk }}</th>
+                            <td>{{ basin.name }}</td>
+                            <td>{{ basin.area_km2|floatformat:2 }}</td>
+                            <td>{{ basin.perimeter_km|floatformat:2 }}</td>
+                            <td>
+                                {% include 'partials/actions.html' with pk=basin.pk detail='basins:detail' edit='basins:edit' delete='basins:delete' %}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+
+            {% else %}
+
+                <h3>Sem registros...</h3>
+
+            {% endif %}
+
+            <!-- pagination -->
+            {% include 'partials/paginator.html' %}
+
+            </div><!-- col-md-12 -->
+    </div><!-- row -->
+
+{% endblock content %}
+
+{% block extras_js %}
+    <script type="text/javascript">
+        $(".alert").show().delay(3000).fadeOut();
+    </script>
+{% endblock %}

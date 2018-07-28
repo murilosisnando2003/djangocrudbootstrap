@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <h1>Rios</h1>
+            <hr>
+
+            {% include 'partials/add_button.html' with link='rivers:add' %}
+
+            {% if page_objects %}
+
+                <!-- search form -->
+                <form class="navbar-form navbar-right" action="." method="get">
+
+                    <input id="search_box" name="search_box" type="text" placeholder="Pesquisar pelo nome"
+                           class="form-control">
+
+                    <button type="submit" class="btn btn-primary form-control">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+
+                    {% if result %}
+                        <a class="btn btn-primary btn-success" href="{% url 'rivers:list' %}" role="button">
+                            <span class="glyphicon glyphicon-refresh" aria-hidden="true" title="Resetar"></span>
+                        </a>
+                    {% endif %}
+
+                </form>
+
+                {% if result %}
+                    <h3 class="text-success">Resultado da busca: {{ result }} registro(s) com o nome
+                        <strong>{{ selection }}</strong></h3>
+                {% endif %}
+
+                </div><!-- col-md-12 -->
+
+                <div class="col-md-12 TbMargin">
+
+                {% bootstrap_messages %}
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome do Rio</th>
+                        <th>Ordem do Rio</th>
+                        <th>Comprimento (km)</th>
+                        <th>Bacia Hidrográfica</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for river in page_objects %}
+
+                        <tr>
+                            <th>{{ river.pk }}</th>
+                            <td>{{ river.name }}</td>
+                            <td>{{ river.order }}</td>
+                            <td>{{ river.length_km }}</td>
+                            <td>{{ river.basin.name }}</td>
+                            <td>
+                                {% include 'partials/actions.html' with pk=river.pk detail='rivers:detail' edit='rivers:edit' delete='rivers:delete' %}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+            {% else %}
+
+                <h3>Sem registros...</h3>
+
+            {% endif %}
+
+            <!-- pagination -->
+            {% include 'partials/paginator.html' %}
+
+            </div><!-- col-md-12 -->
+    </div><!-- row -->
+
+{% endblock content %}
+
+{% block extras_js %}
+    <script type="text/javascript">
+        $(".alert").show().delay(3000).fadeOut();
+    </script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <h1>Bacia Hidrográfica - {{ basin.name }}</h1>
+            <hr>
+
+            <div class="desc">
+                <dl>
+                    <dt>NOME:</dt>
+                    <dd>{{ basin.name }}</dd>
+                    <dt>ÁREA:</dt>
+                    <dd>{{ basin.area_km2|floatformat:2 }} km<sup>2</sup></dd>
+                    <dt>PERÍMETRO:</dt>
+                    <dd>{{ basin.perimeter_km|floatformat:2 }} km</dd>
+                </dl>
+
+                <strong>FONTE: </strong><a href="#">Agência de Gestão das Águas</a>
+
+            </div>
+
+            <hr>
+
+            {% include 'partials/links_details.html' with pk=basin.pk list='basins:list' edit='basins:edit' delete='basins:edit' %}
+
+        </div><!-- col-md-12 -->
+    </div><!-- row -->
+
+{% endblock content %}
